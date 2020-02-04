@@ -20,12 +20,12 @@ include ("entete.php"); //appelle la page d'entete
 <div>
 <!-- crée un formulaire avec les différents articles du catalogue-->
 
-<form method="post" action="panierV2.php">
+<form method="post" action="panierV3.php">
 <?php 
 foreach ($catalogue as $article) {?>
 <div>
 
-<input type="checkbox" name="<?php echo $article[0] ?>" id="<?php echo $article[0] ?>" /> 
+<input type="checkbox" name="<?php echo $article[0] ?>" id="<?php echo $article[0] ?>" />Sélectionner l'article</input>
 <label for="<?php echo $article[0] ?>"><?php afficheArticle ($article[0],$article[2],$article[1]); }?></label>
 
 </div>

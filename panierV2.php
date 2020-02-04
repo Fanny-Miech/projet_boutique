@@ -40,6 +40,12 @@ foreach ($catalogue as $article) {
         //si oui, ajouter l'article au panier
         $monPanier[] = $article;
     }
+    elseif (empty ($_POST[$article[3]]) && (!empty($_SESSION['panier']))) {
+        foreach ($_SESSION['panier'] as $articleP) {
+            $monPanier[]= $artricleP;
+        }
+}
+
 }
 
 //initialise la quantité des artcicles à 1
@@ -71,14 +77,16 @@ foreach ($monPanier as $key => $article) {
     }
 }
 
+
 //réinitialisation de $_SESSION
 if (!empty($_SESSION)) {
-    destroy-session();
+    destroy_session();
 }
 foreach ($monPanier as $key => $article) {
-    $_SESSION['panier'][] = [$article[1],$article[4]];
+    $_SESSION['panier'][] = $article;
 }
 var_dump($_SESSION);
+var_dump($monPanier);
 
 
 

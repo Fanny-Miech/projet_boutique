@@ -28,14 +28,16 @@ function afficheArticle2() {
 
 // Cette fonction affiche l'article 1
 function afficheArticle3() {
+    echo '<div class="row">';
     $art3 = ["Taj Mahal", "1300 €", "images/taj_mahal.jpg"];
     echo $art3[0]; // écrire le nom de l'article
     echo ('<br />');
     echo ('<img src="'.$art3[2].'" alt="'.$art3[0].'">');  //afficher l'image de l'article
     echo ('<br />');
     echo ('Pour seulement ' . $art3[1]); //écrire le prix de l'article
+    echo ('<br /> ');
     echo ('<br />');
-    echo ('<br />');
+    echo '</div>';
   
 }
 
@@ -46,7 +48,7 @@ function afficheArticle($nom,$image,$prix) {
     echo ('<img src="'.$image.'" alt="'.$nom.'">');  //afficher l'image de l'article
     echo ('<br /><br />');
     echo ('Pour seulement ' . $prix); //écrire le prix de l'article
-    echo ('<br />');
+    echo ('<br /><HR>');
     echo ('<br />');
 
 }
