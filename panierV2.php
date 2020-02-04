@@ -71,11 +71,16 @@ foreach ($monPanier as $key => $article) {
     }
 }
 
+//réinitialisation de $_SESSION
+if (!empty($_SESSION)) {
+    destroy-session();
+}
 foreach ($monPanier as $key => $article) {
     $_SESSION['panier'][] = [$article[1],$article[4]];
 }
-
 var_dump($_SESSION);
+
+
 
 //REINITIALISATION DE $monPanier
 $quantite = "";

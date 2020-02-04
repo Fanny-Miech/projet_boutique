@@ -1,4 +1,5 @@
 <?php 
+session_start();
 include ("fonctions.php");//appelle la page fonction
 
 //définition des variables : les variables sont des tableaux de strings
