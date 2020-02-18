@@ -4,7 +4,7 @@ include ("fonctions.php");//appelle la page fonction
 
 //définition des variables : les variables sont des tableaux de strings
 $art1 = ["Grande muraille de Chine","1000 €","images/muraille_de_chine.jpg"];
-$art2 = ["Machu Picchu","1200 €","images/matchu_pitchu.jpg" ];
+$art2 = ["Machu Picchu","1200 €","images/machu_picchu.jpg" ];
 $art3 = ["Taj Mahal", "1300 €", "images/taj_mahal.jpg"];
 
 $catalogue = [$art1, $art2, $art3];
