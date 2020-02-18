@@ -69,18 +69,27 @@ function add_article($bdd, $articles) {
     echo "L'article ".$articles[0]." a bien été ajouté !";
 }
 
+//cette fonction affiche tous les clients présents dans la bdd
+function list_clients($bdd) {
+    $reponse = $bdd->query('select * from users');
+    while ($donnees = $reponse -> fetch())
+    {
+        echo '<p>'. $donnees['name'].' - '. $donnees['email'].'<p>';
+    }
+}
+
+
 //cette fonction ajoute un client
 function ajouter_client($bdd, $client) {
     $req = $bdd->prepare('INSERT INTO users(name, email, adress, postal_code, city) 
     VALUES(:name, :email, :adress, :postal_code, :city)');
     $req->execute(array(
         'name' => $client[0],
-        'description' => $client[1],
-        'price' => $client[2],
-        'poids' => $client[3],
-        'image' => $client[4]
+        'email' => $client[1],
+        'adress' => $client[2],
+        'postal_code' => $client[3],
+        'city' => $client[4]
         ));
-
-    echo "Le client ".$articles[0]." a bien été ajouté !";
+    echo "Le client ".$client[0]." a bien été ajouté !";
 }
 ?>

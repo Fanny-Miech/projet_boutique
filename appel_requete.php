@@ -24,10 +24,16 @@ commande_1($bdd);
 echo '</br> </br><h3> Liste des commandes passées par Charlize </h3> </br>';
 commandes_charlize($bdd);
 
+echo '</br> </br><h3> Ajouter un client à la liste. </h3></br>';
 $client=['alibaba', 'ali.baba@40voleurs.com', 'ebjhvse', 35000, 'asialand'];
 ajouter_client($bdd, $client);
+echo '</br></br> Nouvelle liste des clients :</br>';
+list_clients($bdd);
 
+
+echo '</br> </br><h3> Supprimer les clients sans commande </h3> </br>';
 suppr_client($bdd);
+list_clients($bdd);
 
 
 ?>
