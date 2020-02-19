@@ -6,7 +6,7 @@ function afficheArticle1() {
     echo ('<br />');
     echo ('<img src="'.$art1[2].'" alt="'.$art1[0].'">');  //afficher l'image de l'article
     echo ('<br />');
-    echo ('Pour seulement ' . $art1[1]); //écrire le prix de l'article
+    echo ('Pour seulement ' . $art1[1]. ' euros'); //écrire le prix de l'article
     echo ('<br />');
     echo ('<br />');
 }
@@ -105,7 +105,7 @@ function totalPanier($panier) {
     //pour chaque article du panier
     foreach ($panier as $article){
         //ajouter le prix au total
-        $total+=intval($article[1])*intval($article[4]);
+        $total+=intval($article['price'])*intval($article['quantity']);
     }
     echo '<h3>Total panier : '.$total. ' € </h3>';
     //return $total;
