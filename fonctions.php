@@ -1,4 +1,5 @@
 <?php
+
 // Cette fonction affiche l'article 1
 function afficheArticle1() {
     $art1 = ["Grande muraille de Chine","1000 €","images/muraille_de_chine.jpg"];
@@ -47,7 +48,7 @@ function afficheArticle($nom,$image,$prix) {
     echo ('<br />');
     echo ('<img src="'.$image.'" alt="'.$nom.'">');  //afficher l'image de l'article
     echo ('<br /><br />');
-    echo ('Pour seulement ' . $prix); //écrire le prix de l'article
+    echo ('Pour seulement ' . $prix. ' € !'); //écrire le prix de l'article
     echo ('<br /><HR>');
     echo ('<br />');
 
@@ -107,8 +108,8 @@ function totalPanier($panier) {
         //ajouter le prix au total
         $total+=intval($article['price'])*intval($article['quantity']);
     }
-    echo '<h3>Total panier : '.$total. ' € </h3>';
-    //return $total;
+    // echo '<h3>Total panier : '.$total. ' € </h3>';
+    return $total;
 }
 
 
@@ -117,4 +118,38 @@ function viderPanier(){
 session_destroy();
 $monPanier=null;
 return $monPanier;
+}
+
+function totalWeight() {
+    $total=0;
+    foreach ($_SESSION['panier'] as $article) {
+        $total+=intval($article['weight'])*intval($article['quantity']);
+    }
+    return $total;
+}
+
+//fonction qui appelle le dernier Users_id
+function last_users_id($bdd) {
+    $reponse = $bdd->query('SELECT id FROM users ORDER BY id DESC LIMIT 1');
+    while ($donnees = $reponse -> fetch()) {
+    }
+    return intval($donnees['id']);
+}
+
+//fonction qui appelle le dernier orders_id
+function last_orders_id($bdd) {
+    $reponse = $bdd->query('SELECT id FROM orders ORDER BY id DESC LIMIT 1');
+    while ($donnees = $reponse -> fetch())
+    {
+    }
+    return $donnees['id'];
+}
+
+//fonction qui écrit la date d'aujourd'hui
+function current_date($bdd) {
+    $reponse = $bdd->query('SELECT CURRENT_DATE');
+    while ($donnees = $reponse -> fetch())
+    {
+    }
+    return $donnees;
 }

@@ -9,7 +9,7 @@ try
 }
 catch(Exception $e)
 {
-        die('Erreur : '.$e->getMessage());
+    die('Erreur : '.$e->getMessage());
 }
 
 //=================================================================
@@ -19,108 +19,122 @@ $erreur = true;
 $monPanier = array();
 $quantité_init = '1';
 
+//0. On récupère notre catalogue        OK
+//1. On restaure notre panier depuis POST = on va stocker le produit correspondant à chacun des id
+//1.1. On boucle sur notre catalogue
+//1.2 Pour chaque produit du catalogue, on regarde si il est dans notre liste d'ids, si oui on l'ajoute au panier
+//1.3 Si le produit est dans notre panier on va chercher sa quantité et on l'ajoute au panier
+//2. On affiche le panier               OK
+//3. On sauvegarde la panier en SESSION OK
 
-//REMPLISSAGE DU PANIER
-//pour chaque article du catalogue
-//foreach ($catalogue as $article) {
-$reponse = $bdd->query('select * from articles');
-while ($donnees = $reponse -> fetch())
-{
+
+
+
+
+
 //================================================================================================
 
-    //si j'ai un POST et pas de session => traiter le post pour créer le panier
-    if (isset($_POST[$donnees['id']]) && !isset($_POST['supprimer_' . $donnees['id']]) && (empty($_SESSION))) {
+//REMPLISSAGE DU PANIER
+if (!empty($_POST)) {
+    //pour chaque article du catalogue
+    $reponse = $bdd->query('select * from articles');
+    while ($donnees = $reponse -> fetch()) {
 
-        //si oui, ajouter l'article au panier
-        $monPanier[] = $donnees;
-
-        //initialise la quantité des artcicles à 1
-        foreach ($monPanier as $key => $article) {
-            if (isset($_POST['quantite_de_' . $article['id']])) {
-                $monPanier [$key]['quantity'] = $_POST['quantite_de_' . $article['id']];
-            } else {
-                $monPanier [$key]['quantity']= $quantité_init;
-            }
-        }
+    //si j'ai un POST => traiter le post pour créer le panier
+        if (isset($_POST[$donnees['id']]) && !isset($_POST['supprimer_' . $donnees['id']])) {
+            //si oui, ajouter l'article au panier
+            $monPanier[] = $donnees;
     
-
-        //je teste si la quantité est bonne
-        foreach ($monPanier as $key => $article) {
-            //si j'ai une quantité
-            if (isset($_POST['quantite_de_' . $article['id']])) {
-                $error = false;
-                //j'initialise ma variable pour chaque article
-                $quantite = $_POST['quantite_de_' . $article['id']];
-                //si la quantité est vide 
-                if (empty($quantite)) {
-                    //j'initialise mon message d'erreur
-                    echo "Entrez une quantité pour" . $article['name'];
-                    $erreur = true;
+            //initialise la quantité des artcicles à 1 =======> à l'envers
+            foreach ($monPanier as $key => $article) {
+                if (isset($_POST['quantite_de_' . $article['id']])) {
+                    $monPanier [$key]['quantity'] = $_POST['quantite_de_' . $article['id']];
                 } else {
-                    $monPanier[$key]['quantity'] = $quantite;
-
+                    $monPanier [$key]['quantity']= $quantité_init;
                 }
             }
-        }
-    }
-
-//====================================================================================
-
-    //si je n'ai pas de $_POST et j'ai une session => inclure la session dans le panier
-    elseif (empty ($_POST[$donnees['id']]) && (!empty($_SESSION['panier']))) {
-        foreach ($_SESSION['panier'] as $articleP) {
-            $monPanier[]= $artricleP;
-        }
-    }
-
-//=====================================================================================
-
-    //si j'ai un POST et une SESSION => écraser la session avec le nouveau panier
-    elseif (isset($_POST[$donnees['id']]) && (!empty($_SESSION['panier']))) {
-
-        //initialise la quantité des artcicles à 1
-        foreach ($monPanier as $key => $article) {
-            if (isset($_POST['quantite_de_' . $article['id']])) {
-                $monPanier [$key]['quantity'] = $_POST['quantite_de_' . $article['id']];
-            } else {
-
-                $monPanier [$key]['quantity'] = $quantité_init;
-            }
-        }
-
-        //je teste si la quantité est bonne
-        foreach ($monPanier as $key => $article) {
-            //si j'ai une quantité
-            if (isset($_POST['quantite_de_' . $article['id']])) {
-                $error = false;
-                //j'initialise ma variable pour chaque article
-                $quantite = $_POST['quantite_de_' . $article['id']];
-                //si la quantité est vide 
-                if (empty($quantite)) {
-                    //j'initialise mon message d'erreur
-                    echo "Entrez une quantité pour" . $article['name'];
-                    $erreur = true;
-                } else {
-                    $monPanier[$key]['quantity'] = $quantite;
-
+    
+            //je teste si la quantité est bonne ========> ok
+            foreach ($monPanier as $key => $article) {
+                //si j'ai une quantité
+                if (isset($_POST['quantite_de_' . $article['id']])) {
+                    $error = false;
+                    //j'initialise ma variable pour chaque article
+                    $quantite = $_POST['quantite_de_' . $article['id']];
+                    //si la quantité est vide
+                    if (empty($quantite)) {
+                        //j'initialise mon message d'erreur
+                        echo "Entrez une quantité pour" . $article['name'];
+                        $erreur = true;
+                    } else {
+                        $monPanier[$key]['quantity'] = $quantite;
+                    }
                 }
             }
-        }
-
-        //réinitialisation de $_SESSION
-        destroy_session();
-        foreach ($monPanier as $key => $article) {
-            $_SESSION['panier'][] = $article;
         }
     }
 }
+//====================================================================================
 
+//si je n'ai pas de $_POST et j'ai une session => inclure la session dans le panier =====>ok
+elseif (!empty($_SESSION['panier'])) {
+    $monPanier = $_SESSION['panier'];
+}
+
+//=====================================================================================
+
+// //si j'ai un POST et une SESSION => écraser la session avec le nouveau panier ======>pas besoin
+// elseif (isset($_POST[$donnees['id']]) && (!empty($_SESSION['panier']))) {
+
+// //initialise la quantité des artcicles à 1
+// var_dump($monPanier);
+//         foreach ($monPanier as $key => $article) {
+//             if (isset($_POST['quantite_de_' . $article['id']])) {
+//                 $monPanier [$key]['quantity'] = $_POST['quantite_de_' . $article['id']];
+//             } else {
+
+//                 $monPanier [$key]['quantity'] = $quantité_init;
+//             }
+//         }
+
+//         //je teste si la quantité est bonne
+//         foreach ($monPanier as $key => $article) {
+//             //si j'ai une quantité
+//             if (isset($_POST['quantite_de_' . $article['id']])) {
+//                 $error = false;
+//                 //j'initialise ma variable pour chaque article
+//                 $quantite = $_POST['quantite_de_' . $article['id']];
+//                 //si la quantité est vide 
+//                 if (empty($quantite)) {
+//                     //j'initialise mon message d'erreur
+//                     echo "Entrez une quantité pour" . $article['name'];
+//                     $erreur = true;
+//                 } else {
+//                     $monPanier[$key]['quantity'] = $quantite;
+
+//                 }
+//             }
+//         }       
+
+//     }
+// }
+
+//================================================================================
+
+//Si pas de $_SESSION et pas de $_POST ==> écrire le panier est vide
+else {
+    echo '<h3>Le panier est vide.</h3>';
+}
+
+
+//réinitialisation de $_SESSION ====> ok
+$_SESSION['panier'] = $monPanier;
 
 //=============================================================================
 
 
 var_dump($_SESSION);
-var_dump($monPanier);
+//var_dump($monPanier);
 
 
 
@@ -174,10 +188,33 @@ include ("entete.php"); //appelle la page d'entete
         }
 
         ?>
-        <br><br><br>
+        <br>
         <!--submit : soumettre le formulaire-->
         <input type="submit" name="recalculer" value="Recalculer"/>
-        <form>
+    </form>
+
+
+<!-- Nouveau formulaire pour valider la commande-->
+    <form method="post" action="commande_bdd.php">
+    <?php
+        //pour chaque article de mon panier
+        foreach ($monPanier as $article) { ?>
+            
+            <!-- créer un champ caché pour garder l'id de l'article -->
+            <input type="hidden" name="<?php echo $article['id']; ?>" id="<?php echo $article['id'] ?>">
+            
+            <!-- créer un champ caché pour garder la quantité de l'article -->
+            <input type="hidden" name="<?php echo $article['quantity']; ?>" id="<?php echo $article['quantity'] ?>">
+            <?php
+        }?>
+    </br><br>
+        <h2> Valider la commande </h2>
+        <!-- envoyer la commande-->
+        <input type="submit" name="valider" value="valider"/>
+    </form>
+
 </div>
+
+
 </body>
 </html>

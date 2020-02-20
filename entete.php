@@ -1,4 +1,9 @@
 
+<?php
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,9 +20,9 @@
 </div>
 <!--<img src="images/ciel2.jpg" alt="ciel" ></img>-->
 <div class="topnav">
-  <a href="catalogueFormulaireV2.php">Catalogue</a>
-  <a href="panierV2.php">Mon panier</a>
-  <a href="<?php viderPanier() ?>">Vider le panier</a>
+  <a href="index_bdd.php">Catalogue</a>
+  <a href="panierV4_bdd.php">Mon panier</a>
+  <a href="">Vider le panier</a>
 </div>
 
     
