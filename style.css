@@ -40,3 +40,29 @@
     background-color: #ddd;
     color: black;
   }
+
+/*Taille des images*/
+.card-img-top {
+  width: 50vw;
+}
+
+/*dimension de la card*/
+
+/*indisponible*/
+.indisponible {
+ color: red;
+}
+
+/*card formulaire*/
+.card-formulaire {
+  text-align: center;
+}
+
+
+  /*footer*/
+  .footer {
+    text-align: center;
+    background-image: url("img/ciel2.jpg");
+  padding-top: 2vw;
+  padding-bottom: 2vw;
+  }

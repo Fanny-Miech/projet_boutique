@@ -19,6 +19,9 @@ $erreur = true;
 $monPanier = array();
 $quantité_init = '1';
 
+
+//=======================================================================================
+
 //0. On récupère notre catalogue        OK
 //1. On restaure notre panier depuis POST = on va stocker le produit correspondant à chacun des id
 //1.1. On boucle sur notre catalogue
@@ -26,11 +29,6 @@ $quantité_init = '1';
 //1.3 Si le produit est dans notre panier on va chercher sa quantité et on l'ajoute au panier
 //2. On affiche le panier               OK
 //3. On sauvegarde la panier en SESSION OK
-
-
-
-
-
 
 //================================================================================================
 
@@ -122,9 +120,12 @@ include ("entete.php"); //appelle la page d'entete
         <?php
         //pour chaque article de mon panier
         foreach ($monPanier as $article) { ?>
-        <div>
+        <div class="card-formulaire">
             <!-- créer un champ caché pour garder le nom de l'article -->
             <input type="hidden" name="<?php echo $article['id']; ?>" id="<?php echo $article['id'] ?>">
+
+             <!-- j'affiche chaque article et lie le tableau article aux boutons de saisie-->
+             <label for="Quantité"><?php afficheArticle($article['name'], $article['image'], $article['price']) ?>
 
             <!-- créer un champ 'quantité'-->
          Quantité
@@ -135,8 +136,9 @@ include ("entete.php"); //appelle la page d'entete
             Supprimer l'article
             <input type="checkbox" name="<?= 'supprimer_' . $article['id']; ?>" value="supprimer">
 
-            <!-- j'affiche chaque article et lie le tableau article aux boutons de saisie-->
-            <label for="Quantité"><?php afficheArticle($article['name'], $article['image'], $article['price']) ?> </label>
+            </label>
+
+        </br></br><HR>
             <?php } ?>
 
         </div>
@@ -176,9 +178,13 @@ include ("entete.php"); //appelle la page d'entete
         <!-- envoyer la commande-->
         <input type="submit" name="valider" value="valider"/>
     </form>
+    </br></br></br>
 
 </div>
 
 
 </body>
+<?php
+include ("footer.php");
+?>
 </html>

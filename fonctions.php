@@ -44,13 +44,20 @@ function afficheArticle3() {
 
 // Cette fonction affiche un article
 function afficheArticle($nom,$image,$prix) {
-    echo ('<h2>'.$nom.'</h2>'); // écrire le nom de l'article
-    echo ('<br />');
-    echo ('<img src="'.$image.'" alt="'.$nom.'">');  //afficher l'image de l'article
-    echo ('<br /><br />');
-    echo ('Pour seulement ' . $prix. ' € !'); //écrire le prix de l'article
-    echo ('<br /><HR>');
-    echo ('<br />');
+    echo '</br></br><div class="card">';
+    echo '<img class="card-img-top" src="'.$image.'" alt="'.$nom.'">';
+    echo '<div class=card-body">';
+    echo '<h2 class="card-title">'.$nom.'</h2>';
+    echo '<h4 class="card-text"> Pour seulement '.$prix.' € !</h4>';
+    echo '</div></div>'; 
+
+
+    // echo ('<h2>'.$nom.'</h2>'); // écrire le nom de l'article
+    // echo ('<br />');
+    // echo ('<img src="'.$image.'" alt="'.$nom.'">');  //afficher l'image de l'article
+    // echo ('<br /><br />');
+    // echo ('Pour seulement ' . $prix. ' € !'); //écrire le prix de l'article
+     echo ('<br />');
 
 }
 

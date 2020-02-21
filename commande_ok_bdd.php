@@ -97,3 +97,8 @@ VALUES(:Articles_id, :last_id, :quantity)');
 }
 
 ?>
+</body>
+<?php
+include ("footer.php");
+?>
+</html>

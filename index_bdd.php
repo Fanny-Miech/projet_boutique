@@ -29,16 +29,27 @@ include ("entete.php"); //appelle la page d'entete
 $reponse = $bdd->query('select * from articles');
     while ($donnees = $reponse -> fetch())
     {?>
-        <div>
-
+        <div class="card-formulaire">
+      
+    <label for="<?php echo $donnees['id'] ?>"><?php afficheArticle($donnees['name'], $donnees['image'], $donnees['price']);?>
+        <?php if ($donnees['stock']==0) {
+        echo '<h3 class="indisponible"> Cet article est indisponible </h3>';
+    }
+    else {?>
         <input type="checkbox" name="<?php echo $donnees['id'] ?>" id="<?php echo $donnees['id'] ?>" />Sélectionner l'article</input>
-        <label for="<?php echo $donnees['id'] ?>"><?php afficheArticle($donnees['name'], $donnees['image'], $donnees['price']); }?></label>
-
+    <?php
+    }
+    echo '<br /><br /><HR>';
+}?>
+        </label>
         </div>
 
         <input type="submit" value="Ajouter au panier" />
         <form>
         </div>
 
-</body>
+        </body>
+<?php
+include ("footer.php");
+?>
 </html>

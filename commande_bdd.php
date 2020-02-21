@@ -1,7 +1,8 @@
 <?php 
 session_start();
-var_dump($_SESSION);
+//var_dump($_SESSION);
 
+//===============================================================================
 
 include ("fonctions.php");//appelle la page fonction
 
@@ -56,3 +57,9 @@ include ("entete.php"); //appelle la page d'entete
         <!-- envoyer la commande-->
         <input type="submit" name="valider" value="valider"/>
     </form>
+
+    </body>
+<?php
+include ("footer.php");
+?>
+</html>
