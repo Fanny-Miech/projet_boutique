@@ -130,26 +130,31 @@ function totalWeight() {
 
 //fonction qui appelle le dernier Users_id
 function last_users_id($bdd) {
-    $reponse = $bdd->query('SELECT id FROM users ORDER BY id DESC LIMIT 1');
-    while ($donnees = $reponse -> fetch()) {
-    }
-    return intval($donnees['id']);
+    $reponse = $bdd->query('SELECT id FROM users ORDER BY id DESC LIMIT 1')->fetch();
+    return $reponse[0];
 }
 
 //fonction qui appelle le dernier orders_id
-function last_orders_id($bdd) {
-    $reponse = $bdd->query('SELECT id FROM orders ORDER BY id DESC LIMIT 1');
-    while ($donnees = $reponse -> fetch())
-    {
-    }
-    return $donnees['id'];
+function last_orders_id($bdd)
+{
+    $reponse = $bdd->query('SELECT id FROM orders ORDER BY id DESC LIMIT 1')->fetch();
+    return $reponse[0];
 }
 
-//fonction qui écrit la date d'aujourd'hui
-function current_date($bdd) {
-    $reponse = $bdd->query('SELECT CURRENT_DATE');
-    while ($donnees = $reponse -> fetch())
-    {
-    }
-    return $donnees;
+//fonction qui retourne la date du jour
+function today_date($bdd){
+    $reponse = $bdd->query('SELECT CURRENT_DATE')->fetch();
+    $date = $reponse[0];
+    return $date;
+}
+
+//cette fonction supprime les clients qui n'ont pas de commande
+function suppr_client($bdd) {
+    $reponse = $bdd->query('DELETE FROM users
+    WHERE users.id 
+    NOT IN (
+        SELECT orders.Users_id
+        FROM orders
+        )
+    ');
 }

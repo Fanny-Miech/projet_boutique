@@ -35,6 +35,8 @@ $quantité_init = '1';
 //================================================================================================
 
 //REMPLISSAGE DU PANIER
+
+//Si il y a un $_POST
 if (!empty($_POST)) {
     //pour chaque article du catalogue
     $reponse = $bdd->query('select * from articles');
@@ -76,48 +78,11 @@ if (!empty($_POST)) {
 }
 //====================================================================================
 
-//si je n'ai pas de $_POST et j'ai une session => inclure la session dans le panier =====>ok
+//si je n'ai pas de $_POST et j'ai un $_SESSION => inclure la session dans le panier =====>ok
 elseif (!empty($_SESSION['panier'])) {
     $monPanier = $_SESSION['panier'];
 }
 
-//=====================================================================================
-
-// //si j'ai un POST et une SESSION => écraser la session avec le nouveau panier ======>pas besoin
-// elseif (isset($_POST[$donnees['id']]) && (!empty($_SESSION['panier']))) {
-
-// //initialise la quantité des artcicles à 1
-// var_dump($monPanier);
-//         foreach ($monPanier as $key => $article) {
-//             if (isset($_POST['quantite_de_' . $article['id']])) {
-//                 $monPanier [$key]['quantity'] = $_POST['quantite_de_' . $article['id']];
-//             } else {
-
-//                 $monPanier [$key]['quantity'] = $quantité_init;
-//             }
-//         }
-
-//         //je teste si la quantité est bonne
-//         foreach ($monPanier as $key => $article) {
-//             //si j'ai une quantité
-//             if (isset($_POST['quantite_de_' . $article['id']])) {
-//                 $error = false;
-//                 //j'initialise ma variable pour chaque article
-//                 $quantite = $_POST['quantite_de_' . $article['id']];
-//                 //si la quantité est vide 
-//                 if (empty($quantite)) {
-//                     //j'initialise mon message d'erreur
-//                     echo "Entrez une quantité pour" . $article['name'];
-//                     $erreur = true;
-//                 } else {
-//                     $monPanier[$key]['quantity'] = $quantite;
-
-//                 }
-//             }
-//         }       
-
-//     }
-// }
 
 //================================================================================
 
@@ -133,9 +98,8 @@ $_SESSION['panier'] = $monPanier;
 //=============================================================================
 
 
-var_dump($_SESSION);
+//var_dump($_SESSION);
 //var_dump($monPanier);
-
 
 
 //REINITIALISATION DE $monPanier
@@ -181,10 +145,10 @@ include ("entete.php"); //appelle la page d'entete
         echo '<br/>.<br/>';
         //si mon panier est vide j'écris 'le panier est vide'
         if (empty($monPanier)) {
-            echo 'Le panier est vide';
+            echo 'Le panier est vide </br>';
         } //sinon afficher le total
         else {
-            totalPanier($monPanier);
+            echo '<h3> Total Panier : '.totalPanier($monPanier).' €</h3>';
         }
 
         ?>
