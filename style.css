@@ -66,3 +66,16 @@
   padding-top: 2vw;
   padding-bottom: 2vw;
   }
+
+  /*valider*/
+  .btn-lg {
+    width: 200px; height: 50px;
+    font-size: large;
+  }
+
+  /* checkbox */
+  .checkbox {
+    width: 20px; 
+    height: 20px;
+    text-align: center;
+  }

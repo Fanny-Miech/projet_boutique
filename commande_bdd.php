@@ -25,21 +25,10 @@ include ("entete.php"); //appelle la page d'entete
 //===============================================================================
 ?>
 
+<div class="card-formulaire">
 <h2> Veuillez saisir vos coordonnées</h2>
 
-<form method="post" action="commande_ok_bdd.php">     
-
-        <?php //foreach ($_POST['id'] as $id) {
-        ?>    
-            <!-- créer un champ caché pour garder l'id de l'article -->
-           <!--  <input type="hidden" name="<?php //echo $id ?>" id="<?php// echo $id ?>">-->
-        <?php// };
-        
-        //foreach ($_POST['quantity'] as $quantity) {
-        ?>  
-            <!-- créer un champ caché pour garder la quantité de l'article -->
-           <!--  <input type="hidden" name="<?php// echo $quantity ?>" id="<?php //echo $quantity ?>">-->
-        <?php// }; ?>    
+<form method="post" action="commande_ok_bdd.php">        
             
             <!-- créer des champs pour entrer les coordonnées du client -->
             <h3>Nom</h3>
@@ -55,8 +44,11 @@ include ("entete.php"); //appelle la page d'entete
     </br><br>
         <h2> Valider la commande </h2>
         <!-- envoyer la commande-->
-        <input type="submit" name="valider" value="valider"/>
+        <input class="btn btn-primary btn-lg" type="submit" name="valider" value="valider"/>
     </form>
+
+        </div>
+    </br></br></br>
 
     </body>
 <?php

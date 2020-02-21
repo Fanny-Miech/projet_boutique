@@ -36,17 +36,19 @@ $reponse = $bdd->query('select * from articles');
         echo '<h3 class="indisponible"> Cet article est indisponible </h3>';
     }
     else {?>
-        <input type="checkbox" name="<?php echo $donnees['id'] ?>" id="<?php echo $donnees['id'] ?>" />Sélectionner l'article</input>
+        <input class="checkbox" type="checkbox" name="<?php echo $donnees['id'] ?>" id="<?php echo $donnees['id'] ?>" />Sélectionner l'article</input>
     <?php
     }
     echo '<br /><br /><HR>';
 }?>
         </label>
+        <br/><br/>
         </div>
 
-        <input type="submit" value="Ajouter au panier" />
+        <input class="btn-lg" type="submit" value="Ajouter au panier" />
         <form>
         </div>
+</br></br></br>
 
         </body>
 <?php

@@ -116,7 +116,7 @@ include ("entete.php"); //appelle la page d'entete
 <!-- crée un formulaire avec les différents articles du catalogue-->
 <div>
 
-    <form method="post" action="panierV4_bdd.php">
+    <form class="card-formulaire" method="post" action="panierV4_bdd.php">
         <?php
         //pour chaque article de mon panier
         foreach ($monPanier as $article) { ?>
@@ -134,7 +134,7 @@ include ("entete.php"); //appelle la page d'entete
 <br><br>
             <!-- créer un bouton 'supprimer'-->
             Supprimer l'article
-            <input type="checkbox" name="<?= 'supprimer_' . $article['id']; ?>" value="supprimer">
+            <input class="checkbox" type="checkbox" name="<?= 'supprimer_' . $article['id']; ?>" value="supprimer">
 
             </label>
 
@@ -142,7 +142,9 @@ include ("entete.php"); //appelle la page d'entete
             <?php } ?>
 
         </div>
-        
+
+        <!-- ===================================================================================== -->
+           
         <?php
         echo '<br/>.<br/>';
         //si mon panier est vide j'écris 'le panier est vide'
@@ -156,12 +158,16 @@ include ("entete.php"); //appelle la page d'entete
         ?>
         <br>
         <!--submit : soumettre le formulaire-->
-        <input type="submit" name="recalculer" value="Recalculer"/>
+        <input class="btn btn-default btn-lg" type="submit" name="recalculer" value="Recalculer"/>
+
+
     </form>
+
+    <!-- ============================================================================================ -->
 
 
 <!-- Nouveau formulaire pour valider la commande-->
-    <form method="post" action="commande_bdd.php">
+    <form class="card-formulaire" method="post" action="commande_bdd.php">
     <?php
         //pour chaque article de mon panier
         foreach ($monPanier as $article) { ?>
@@ -174,9 +180,10 @@ include ("entete.php"); //appelle la page d'entete
             <?php
         }?>
     </br><br>
+
         <h2> Valider la commande </h2>
         <!-- envoyer la commande-->
-        <input type="submit" name="valider" value="valider"/>
+        <input class="btn btn-primary btn-lg" type="submit" name="valider" value="Valider"/>
     </form>
     </br></br></br>
 
