@@ -77,3 +77,4 @@ class Catalogue {
 }
 
 $cat_boutique = new Catalogue();
+
