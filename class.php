@@ -98,6 +98,41 @@ $cat_boutique = new Catalogue($bdd);
 //=========================================================================================
 class  Client {
 
+    //les attributs d'un objet Client :
+    private $id;
+    private $name;
+    private $email;
+    private $adress;
+    private $postal_code;
+    private $city;
+
+    //la construction d'un objet client :
+    public function __construct($id, $name, $email, $adress, $postal_code, $city){
+        $this->id=$id;
+        $this->name=$name;
+        $this->email=$email;
+        $this->adress=$adress;
+        $this->postal_code=$postal_code;
+        $this->city=$city;
+    }
+
+    //GETTER pour chaque attribut -> méthode qui retourne la valeur en dehors de la classe
+    public function getId(){return $this->id;}
+    public function getName(){return $this->name;}
+    public function getEmail(){return $this->email;}
+    public function getPostal_code(){return $this->postal_code;}
+    public function getAdress(){return $this->adress;}
+    public function getCity(){return $this->city;}
+
+    //SETTER pour chaque attribut -> méthode qui permet de définir une valeur
+    public function setId(){return $this->id;}
+    public function setName(){return $this->name;}
+    public function setEmail(){return $this->email;}
+    public function setPostal_code(){return $this->postal_code;}
+    public function setAdress(){return $this->adress;}
+    public function setCity(){return $this->city;}
+
+
 
 }
 
@@ -126,10 +161,11 @@ function displayArticle(Article $article)
     echo '</div></div>';
 }
 
-$articleTest = new Article (15, 'rovaniemi', 'Voyage voyage', 500, 2, 'img/pattaya.jpg', 5, 1, 3);
-var_dump($articleTest);
+//$articleTest = new Article (15, 'rovaniemi', 'Voyage voyage', 500, 2, 'img/pattaya.jpg', 5, 1, 3);
+//var_dump($articleTest);
 
 //=======================================================================================
+
 //Cette fonction affiche le catalogue
 
 function displayCat(Catalogue $catalogue)
