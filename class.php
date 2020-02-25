@@ -60,21 +60,77 @@ class Article {
 class Catalogue {
     private $cat=array();
 
-    public function __construct(){
+    public function __construct($bdd){
         //connection BDD + requête sql SELECT * from Articles
         $reponse = $bdd->query('select * from articles');
         while ($donnees = $reponse -> fetch()){
             //instancier des nouveaux articles via la base de données
             $article = new Article($donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
             //remplir le catalogue avec chaque article
-            $cat[]=$article;
+            $this->cat[]=$article;
         }
     }
 
     public function getCat() {
-        return $cat;
+        return $this->cat;
     }
 }
 
-$cat_boutique = new Catalogue();
+$cat_boutique = new Catalogue($bdd);
+$cat_boutique->getCat();
+var_dump($cat_boutique);
+
+// Cette fonction affiche un article
+function displayArticle($article)
+{
+    echo '</br></br><div class="card">';
+    echo '<img class="card-img-top" src="'.$article['image'].'" alt="'.$article['name'].'">';
+    echo '<div class=card-body">';
+    echo '<h2 class="card-title">'.$article['name'].'</h2>';
+    echo '<h4 class="card-text"> Pour seulement '.$article['price'].' € !</h4>';
+    echo '</div></div>';
+}
+
+
+//Cette fonction affiche le catalogue
+
+function displayCat($catalogue){ ?>
+    <form method="post" action="panierV4_bdd.php">
+    <?php
+    foreach ($catalogue as $art) {?>
+        <div class="card-formulaire">
+      
+    <label for="<?php echo $art['id'] ?>"><?php displayArticle($art);?>
+        <?php if ($art['stock']==0) {
+        echo '<h3 class="indisponible"> Cet article est indisponible </h3>';
+    }
+    else {?>
+        <input class="checkbox" type="checkbox" name="<?php echo $art['id'] ?>" id="<?php echo $art['id'] ?>" />Sélectionner l'article</input>
+    <?php
+    }
+    echo '<br /><br /><HR>';
+
+    }?>
+    </label>
+    <br/><br/>
+    </div>
+
+    <input class="btn-lg" type="submit" value="Ajouter au panier" />
+    <form>
+    </div>
+</br></br></br>
+<?php } 
+
+//==========================================================================
+
+include ("entete.php"); //appelle la page d'entete
+?>
+
+
+<header>
+<h1>Notre catalogue</h1>
+</header>
+
+<?php 
+//displayCat($cat_boutique);
 
