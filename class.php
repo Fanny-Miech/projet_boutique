@@ -132,16 +132,35 @@ class  Client {
     public function setAdress(){return $this->adress;}
     public function setCity(){return $this->city;}
 
-
-
 }
 
 //===================================================================
 
 class ListeClients {
 
+      //1 attribut liste (tableau de client)
+      private $listeClients=array();
+
+      //__construct pour instancier un catalogue depuis une BDD
+      public function __construct($bdd){
+          //connection BDD + aller chercher tous les articles de la bdd (requête sql SELECT * from Articles)
+          $reponse = $bdd->query('select * from users');
+          while ($donnees = $reponse -> fetch()){
+              //instancier des nouveaux articles en objet Article via la base de données
+              $client = new Client($donnees['id'], $donnees['name'], $donnees['email'],$donnees['adress'],$donnees['postal_code'], $donnees['city']);
+              //remplir le catalogue avec chaque article
+              $this->listeClients[]=$client;
+          }
+      }
+  
+      // méthode get pour retourner le catalogue
+      public function getListeClients() {
+          return $this->listeClients;
+      }
 
 }
+
+$liste_boutique=new ListeClients($bdd);
 
 //====================================================================
 //============================== FONCTIONS =================================
@@ -150,9 +169,12 @@ class ListeClients {
 // Cette fonction affiche un article
 function displayArticle(Article $article)
 {
+    //d'abord récupérer les Image, Price et Name de l'article via les GETTERS
     $image=$article->getImage();
     $price=$article->getPrice();
     $name=$article->getName();
+
+    //ensuite afficher l'article
     echo '</br></br><div class="card">';
     echo '<img class="card-img-top" src="'.$image.'" alt="'.$name.'">';
     echo '<div class=card-body">';
@@ -200,12 +222,30 @@ function displayCat(Catalogue $catalogue)
     }
     //finir le formulaire avec un bouton submit et le fermer?>
     <input class="btn-lg" type="submit" value="Ajouter au panier" />
-    <form>
-    
-    
+    <form>   
  
 <?php
 }
+
+//========================================================================
+
+// Cette fonction affiche un article
+function displayClient(Client $client)
+{
+    echo $client->getId().'<br> - '.$client->getName().' est un client de la boutique. <br> Email : '.$client->getEmail().'<br> Code postal : '.$client->getPostal_code().'<br> Ville : '.$client->getCity().'<br><br>';
+}
+
+//======================================================================
+
+//cette fonction affiche la liste des clients
+function displayListeClients(ListeClients $listeClients){
+    foreach ($listeClients->getListeClients() as $client){
+        displayClient($client);
+    }
+
+
+}
+
 //========================================================================
 //======================== HTML =======================================
 //==========================================================================
@@ -224,6 +264,13 @@ include ("entete.php"); //appelle la page d'entete
 displayCat($cat_boutique);
 ?>
 </div></br></br></br>
+
+<div>
+<h2> Liste des clients de la boutique </h2>
+<?php
+displayListeClients($liste_boutique);
+?>
+</div>
 
 
 </body>
