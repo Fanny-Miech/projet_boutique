@@ -1,4 +1,18 @@
 <?php
+
+//appelle la base de données 
+try
+{
+	$bdd = new PDO('mysql:host=localhost;dbname=bd_boutique;charset=utf8', 'fanny.miech', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+}
+catch(Exception $e)
+{
+    die('Erreur : '.$e->getMessage());
+}
+
+//======================================================
+
+
 class Article {
     private $id;
     private $name;
@@ -47,12 +61,14 @@ class Catalogue {
     private $cat=array();
 
     public function __construct(){
-        //connection BDD
-        // requête SELECT* from Articles
-        // while($donnes.....)->fetch {
-        //$article = new Article($donnees['id'], $donnes['name'], ...);
-        // $cat[]=$article
-        //  }
+        //connection BDD + requête sql SELECT * from Articles
+        $reponse = $bdd->query('select * from articles');
+        while ($donnees = $reponse -> fetch()){
+            //instancier des nouveaux articles via la base de données
+            $article = new Article($donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
+            //remplir le catalogue avec chaque article
+            $cat[]=$article;
+        }
     }
 
     public function getCat() {
