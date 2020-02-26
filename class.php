@@ -75,16 +75,24 @@ class Catalogue {
     //__construct pour instancier un catalogue depuis une BDD
     public function __construct($bdd){
         //connection BDD + aller chercher tous les articles de la bdd (requête sql SELECT * from Articles)
-        $reponse = $bdd->query('select * from articles');
+        $reponse = $bdd->query('select * from articles left join chaussures on articles.id = chaussures.articles_id left join vetements on articles.id = vetements.articles_id  order by Categories_id');
         while ($donnees = $reponse -> fetch()){
-            //instancier des nouveaux articles en objet Article via la base de données
-            $article = new Article($donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
+            if ($donnees['taille']!=null){
+                $article = new Vetement($donnees['taille'],$donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
+            }
+            else if ($donnees['pointure']!=null){
+                $article = new Chaussure($donnees['pointure'], $donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']); 
+            }
+            else {
+                //instancier des nouveaux articles en objet Article via la base de données
+                $article = new Article($donnees['id'], $donnees['name'], $donnees['description'], $donnees['price'], $donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
+            }
             //remplir le catalogue avec chaque article
             $this->cat[]=$article;
         }
     }
 
-    // méthode get pour retourner le catalogue
+    // méthode get pour retourner le catalogue (--> TABLEAU d'objets Article)
     public function getCat() {
         return $this->cat;
     }
@@ -92,8 +100,7 @@ class Catalogue {
 
 //Instance d'un nouvel objet Catalogue : $cat_boutique
 $cat_boutique = new Catalogue($bdd);
-
-
+var_dump($cat_boutique->getCat());
 
 
 //=========================================================================================
@@ -189,7 +196,6 @@ class Vetement extends Article {
 
 }
 
-var_dump($cat_boutique->getCat());
 
 //====================================================================
 //============================== FONCTIONS =================================
@@ -212,7 +218,7 @@ function displayArticle(Article $article)
     echo '</div></div>';
 }
 
-//$articleTest = new Article (15, 'rovaniemi', 'Voyage voyage', 500, 2, 'img/pattaya.jpg', 5, 1, 3);
+//$articleTest = new Article (15, 'blabla', 'Voyage voyage', 500, 2, 'img/pattaya.jpg', 5, 1, 3);
 //var_dump($articleTest);
 
 //=======================================================================================
