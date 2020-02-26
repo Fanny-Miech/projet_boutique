@@ -75,7 +75,7 @@ class Catalogue {
     //__construct pour instancier un catalogue depuis une BDD
     public function __construct($bdd){
         //connection BDD + aller chercher tous les articles de la bdd (requête sql SELECT * from Articles)
-        $reponse = $bdd->query('select * from articles left join chaussures on articles.id = chaussures.articles_id left join vetements on articles.id = vetements.articles_id  order by Categories_id');
+        $reponse = $bdd->query('select articles.id, taille, name, pointure, description, price, weight, image, stock, for_sale, Categories_id from articles left join chaussures on articles.id = chaussures.articles_id left join vetements on articles.id = vetements.articles_id  order by Categories_id');
         while ($donnees = $reponse -> fetch()){
             if ($donnees['taille']!=null){
                 $article = new Vetement($donnees['taille'],$donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
@@ -172,7 +172,7 @@ $liste_boutique=new ListeClients($bdd);
 
 //========================================================================
 
-class Chaussure extends Article { //class Chaussure enfant de la classe Article
+class Vetement extends Article { //class Chaussure enfant de la classe Article
     protected $taille;
     public function __construct($taille, $id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id) {
         parent::__construct($id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id);
@@ -185,7 +185,7 @@ class Chaussure extends Article { //class Chaussure enfant de la classe Article
 
 //======================================================================
 
-class Vetement extends Article {
+class Chaussure extends Article {
     protected $pointure;
     public function __construct($pointure, $id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id) {
         parent::__construct($id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id);
@@ -215,6 +215,12 @@ function displayArticle(Article $article)
     echo '<div class=card-body">';
     echo '<h2 class="card-title">'.$name.'</h2>';
     echo '<h4 class="card-text"> Pour seulement '.$price.' € !</h4>';
+    if (is_a ($article, 'Vetement')) {
+        echo "<h2> Tu auras sûrement besoin d'1 ".$article->getTaille(). '...</h2>';
+    }
+    else if (is_a($article, 'Chaussure')){
+        echo "<h2>N'oublie pas de prendre tes ".$article->getPointure().' !</h2>';
+    }
     echo '</div></div>';
 }
 
