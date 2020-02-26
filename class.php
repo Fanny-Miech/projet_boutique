@@ -17,15 +17,15 @@ catch(Exception $e)
 class Article {
 
     //Les attributs de la classe articles
-    private $id;
-    private $name;
-    private $description;
-    private $price;
-    private $weight;
-    private $image;
-    private $stock;
-    private $for_sale;
-    private $Categories_id;
+    protected $id;
+    protected $name;
+    protected $description;
+    protected $price;
+    protected $weight;
+    protected $image;
+    protected $stock;
+    protected $for_sale;
+    protected $Categories_id;
 
 
     //comment instancier des objets Article -> fonction __construct
@@ -39,6 +39,7 @@ class Article {
         $this->stock=$stock;
         $this->for_sale=$for_sale;
         $this->Categories_id=$Categories_id;
+      
     }
 
     //GETTER pour chaque attribut -> méthode qui retourne la valeur en dehors de la classe
@@ -92,7 +93,7 @@ class Catalogue {
 //Instance d'un nouvel objet Catalogue : $cat_boutique
 $cat_boutique = new Catalogue($bdd);
 
-//var_dump($cat_boutique->getCat());
+
 
 
 //=========================================================================================
@@ -162,6 +163,34 @@ class ListeClients {
 
 $liste_boutique=new ListeClients($bdd);
 
+//========================================================================
+
+class Chaussure extends Article { //class Chaussure enfant de la classe Article
+    protected $taille;
+    public function __construct($taille, $id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id) {
+        parent::__construct($id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id);
+        $this->taille = $taille;
+    }
+
+    public function getTaille() {return $this->taille;}
+
+}
+
+//======================================================================
+
+class Vetement extends Article {
+    protected $pointure;
+    public function __construct($pointure, $id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id) {
+        parent::__construct($id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id);
+        $this->pointure = $pointure;
+    }
+
+    public function getPointure() {return $this->pointure;}
+
+}
+
+var_dump($cat_boutique->getCat());
+
 //====================================================================
 //============================== FONCTIONS =================================
 //====================================================================
@@ -196,6 +225,7 @@ function displayCat(Catalogue $catalogue)
     <form method="post" action="panierV4_bdd.php">
    
    <?php
+   //ATTENTION : on ne peut pas boucler sur un tableau !!!
    //pour chaque article de mon tableau catalogue (récupéré de l'objet catalogue via getCat)
     foreach ($catalogue->getCat() as $art) {
         //je récupère les champs stock et id de chaque article du catalogue
@@ -239,7 +269,9 @@ function displayClient(Client $client)
 
 //cette fonction affiche la liste des clients
 function displayListeClients(ListeClients $listeClients){
-    foreach ($listeClients->getListeClients() as $client){
+    //pour chaque $client du tableau (récupéré avec getListeClients()) de l'objet ListeClients --> afficher $client
+    // ATTENTION : on ne peut pas boucler sur un objet !! 
+        foreach ($listeClients->getListeClients() as $client){
         displayClient($client);
     }
 
