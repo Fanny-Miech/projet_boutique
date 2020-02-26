@@ -116,7 +116,7 @@ include ("entete.php"); //appelle la page d'entete
 <!-- crée un formulaire avec les différents articles du catalogue-->
 <div>
 
-    <form class="card-formulaire" method="post" action="panierV4_bdd.php">
+    <form class="card-formulaire" method="post" action="panier_bdd.php">
         <?php
         //pour chaque article de mon panier
         foreach ($monPanier as $article) { ?>

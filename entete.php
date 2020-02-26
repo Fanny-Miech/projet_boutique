@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>entete</title>
+    <title>boutique</title>
 </head>
 <body>
 <div class="hero">
@@ -21,7 +21,7 @@
 <!--<img src="images/ciel2.jpg" alt="ciel" ></img>-->
 <div class="topnav">
   <a href="index_bdd.php">Catalogue</a>
-  <a href="panierV4_bdd.php">Mon panier</a>
+  <a href="panier_bdd.php">Mon panier</a>
   <a href="">Vider le panier</a>
 </div>
 

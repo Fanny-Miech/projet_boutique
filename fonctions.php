@@ -165,3 +165,96 @@ function suppr_client($bdd) {
         )
     ');
 }
+
+//====================================================================
+//============================== FONCTIONS =================================
+//====================================================================
+
+// Cette fonction affiche un article
+function displayArticle(Article $article)
+{
+    //d'abord récupérer les Image, Price et Name de l'article via les GETTERS
+    $image=$article->getImage();
+    $price=$article->getPrice();
+    $name=$article->getName();
+
+    //ensuite afficher l'article
+    echo '</br></br><div class="card">';
+    echo '<img class="card-img-top" src="'.$image.'" alt="'.$name.'">';
+    echo '<div class=card-body">';
+    echo '<h2 class="card-title">'.$name.'</h2>';
+    echo '<h4 class="card-text"> Pour seulement '.$price.' € !</h4>';
+    if (is_a ($article, 'Vetement')) {
+        echo "<h2> Tu auras sûrement besoin d'1 ".$article->getTaille(). '...</h2>';
+    }
+    else if (is_a($article, 'Chaussure')){
+        echo "<h2>N'oublie pas de prendre tes ".$article->getPointure().' !</h2>';
+    }
+    echo '</div></div>';
+}
+
+//$articleTest = new Article (15, 'blabla', 'Voyage voyage', 500, 2, 'img/pattaya.jpg', 5, 1, 3);
+//var_dump($articleTest);
+
+//=======================================================================================
+
+//Cette fonction affiche le catalogue
+
+function displayCat(Catalogue $catalogue)
+{
+    //Je crée mon formlaire d'affichage du catalogue?>
+    <form method="post" action="panier_bdd.php">
+   
+   <?php
+   //ATTENTION : on ne peut pas boucler sur un tableau !!!
+   //pour chaque article de mon tableau catalogue (récupéré de l'objet catalogue via getCat)
+    foreach ($catalogue->getCat() as $art) {
+        //je récupère les champs stock et id de chaque article du catalogue
+        $stock = $art->getStock();
+        $id = $art->getId(); ?>
+           
+        <div class="card-formulaire">
+      
+            <label for="<?php echo $id ?>"><?php displayArticle($art); ?>
+
+            <?php //si l'article n'est plus en stock
+            if ($stock==0) {
+                echo '<h3 class="indisponible"> Cet article est indisponible </h3>';
+            } else {
+                //sinon mettre un bouton checkbox pour ajouter l'article au panier?>
+            <input class="checkbox" type="checkbox" name="<?php echo $id ?>" id="<?php echo $id ?>" />Sélectionner l'article</input>
+            <?php
+            }
+        echo '<br /><br /><HR>'; ?>
+            </label>
+            <br/><br/>
+        </div>
+    <?php
+    }
+    //finir le formulaire avec un bouton submit et le fermer?>
+    <input class="btn-lg" type="submit" value="Ajouter au panier" />
+    <form>   
+ 
+<?php
+}
+
+//========================================================================
+
+// Cette fonction affiche un article
+function displayClient(Client $client)
+{
+    echo $client->getId().'<br> - '.$client->getName().' est un client de la boutique. <br> Email : '.$client->getEmail().'<br> Code postal : '.$client->getPostal_code().'<br> Ville : '.$client->getCity().'<br><br>';
+}
+
+//======================================================================
+
+//cette fonction affiche la liste des clients
+function displayListeClients(ListeClients $listeClients){
+    //pour chaque $client du tableau (récupéré avec getListeClients()) de l'objet ListeClients --> afficher $client
+    // ATTENTION : on ne peut pas boucler sur un objet !! 
+        foreach ($listeClients->getListeClients() as $client){
+        displayClient($client);
+    }
+
+
+}
