@@ -296,7 +296,7 @@ function displayPanier(Panier $panier){
             <br><br>
             <!-- créer un bouton 'supprimer'-->
             Supprimer l'article
-            <input class="checkbox" type="checkbox" name="delete[<?php $article->getId()?>]" value="supprimer">
+            <input class="checkbox" type="checkbox" name="delete[<?= $article->getId()?>]" value="<?= $article->getId()?>">
 
             </label>
 

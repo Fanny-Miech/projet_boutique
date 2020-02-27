@@ -51,7 +51,7 @@ if (!empty($_POST["update"])) {
  }
 
  if (!empty($_POST["delete"])){
-     foreach($_POST["update"] as $id){
+     foreach($_POST["delete"] as $key=>$id){
          $_SESSION['panier']->delete($id);
      }
  }
@@ -99,6 +99,7 @@ include ("entete.php"); //appelle la page d'entete
 
     <form class="card-formulaire" method="post" action="panier_objet.php">
         <?php
+        var_dump($_POST);
         //afficher le panier
         displayPanier($_SESSION['panier']);
         echo '<br/>.<br/>';
