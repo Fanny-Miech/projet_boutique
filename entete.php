@@ -20,8 +20,8 @@
 </div>
 <!--<img src="images/ciel2.jpg" alt="ciel" ></img>-->
 <div class="topnav">
-  <a href="index_bdd.php">Catalogue</a>
-  <a href="panier_bdd.php">Mon panier</a>
+  <a href="index_objet.php">Catalogue</a>
+  <a href="panier_objet.php">Mon panier</a>
   <a href="">Vider le panier</a>
 </div>
 

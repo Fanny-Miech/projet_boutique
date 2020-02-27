@@ -10,8 +10,10 @@ include ("entete.php"); //appelle la page d'entete
 </header>
 
 <div class="card-formulaire">
-<?php 
-//displayArticle($articleTest);
+<?php
+//instancie un nouvel objet Catalogue
+$cat_boutique = new Catalogue($bdd);
+//affiche le Catalogue
 displayCat($cat_boutique);
 ?>
 </div></br></br></br>
@@ -19,6 +21,9 @@ displayCat($cat_boutique);
 <div>
 <h2> Liste des clients de la boutique </h2>
 <?php
+//instancie un nouvel objet ListeClients
+$liste_boutique=new ListeClients($bdd);
+//affiche la ListeClients
 displayListeClients($liste_boutique);
 ?>
 </div>

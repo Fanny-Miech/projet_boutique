@@ -99,7 +99,7 @@ class Catalogue {
 }
 
 //Instance d'un nouvel objet Catalogue : $cat_boutique
-$cat_boutique = new Catalogue($bdd);
+//$cat_boutique = new Catalogue($bdd);
 //var_dump($cat_boutique->getCat());
 
 
@@ -168,7 +168,6 @@ class ListeClients {
 
 }
 
-$liste_boutique=new ListeClients($bdd);
 
 //========================================================================
 
@@ -194,6 +193,69 @@ class Chaussure extends Article {
 
     public function getPointure() {return $this->pointure;}
 
+}
+
+//========================================================================
+
+class Panier {
+    private $panier=array();
+    private $quantité_init=1;
+
+    public function __construct($bdd){
+         //pour chaque article du catalogue
+    $reponse = $bdd->query('select * from articles');
+    while ($donnees = $reponse -> fetch()) {
+
+    //si j'ai un POST => traiter le post pour créer le panier
+        if (isset($_POST[$donnees['id']]) && !isset($_POST['supprimer_' . $donnees['id']])) {
+            //si oui, ajouter l'article au panier
+            $panier[] = $donnees;
+    
+            //initialise la quantité des artcicles à 1 =======> à l'envers
+            foreach ($panier as $key => $article) {
+                if (isset($_POST['quantite_de_' . $article['id']])) {
+                    $panier [$key]['quantity'] = $_POST['quantite_de_' . $article['id']];
+                } else {
+                    $panier [$key]['quantity']= $quantité_init;
+                }
+            }
+    
+            //je teste si la quantité est bonne ========> ok
+            foreach ($panier as $key => $article) {
+                //si j'ai une quantité
+                if (isset($_POST['quantite_de_' . $article['id']])) {
+                    $error = false;
+                    //j'initialise ma variable pour chaque article
+                    $quantite = $_POST['quantite_de_' . $article['id']];
+                    //si la quantité est vide
+                    if (empty($quantite)) {
+                        //j'initialise mon message d'erreur
+                        echo "Entrez une quantité pour" . $article['name'];
+                        $erreur = true;
+                    } else {
+                        $panier[$key]['quantity'] = $quantite;
+                    }
+                }
+            }
+        }
+    }
+
+    }
+
+    public function add(){
+
+    }
+
+    public function update(){
+
+    }
+
+    public function delete(){
+
+    }
+
+    public function getPanier(){return $this->panier;}
+    
 }
 
 ?>
