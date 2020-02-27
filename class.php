@@ -27,6 +27,8 @@ class Article {
     protected $for_sale;
     protected $Categories_id;
 
+    private $article=array();
+
 
     //comment instancier des objets Article -> fonction __construct
     public function __construct($id, $name, $description, $price, $weight, $image, $stock, $for_sale, $Categories_id){
@@ -39,6 +41,8 @@ class Article {
         $this->stock=$stock;
         $this->for_sale=$for_sale;
         $this->Categories_id=$Categories_id;
+
+        $this->article=['id'=>$this->id, 'name'=>$this->name, 'description'=>$this->description, 'price'=>$this->price, 'weight'=>$this->weight, 'image'=>$this->image, 'stock'=>$this->stock, 'for_sale'=>$this->for_sale, 'Categories_id'=>$this->Categories_id];
       
     }
 
@@ -52,6 +56,8 @@ class Article {
     public function getStock(){return $this->stock;}
     public function getFor_sale(){return $this->for_sale;}
     public function getCategoriesId(){return $this->categories_id;}
+
+    public function getArticle(){return $this->article;}
 
     //SETTER pour chaque attribut -> méthode qui permet de définir une valeur
     public function setId(){return $this->id;}
@@ -198,64 +204,41 @@ class Chaussure extends Article {
 //========================================================================
 
 class Panier {
-    private $panier=array();
-    private $quantité_init=1;
 
-    public function __construct($bdd){
-         //pour chaque article du catalogue
-    $reponse = $bdd->query('select * from articles');
-    while ($donnees = $reponse -> fetch()) {
+    protected $panier=array();
+    
+    public function __construct(){
+    }
 
-    //si j'ai un POST => traiter le post pour créer le panier
-        if (isset($_POST[$donnees['id']]) && !isset($_POST['supprimer_' . $donnees['id']])) {
-            //si oui, ajouter l'article au panier
-            $panier[] = $donnees;
-    
-            //initialise la quantité des artcicles à 1 =======> à l'envers
-            foreach ($panier as $key => $article) {
-                if (isset($_POST['quantite_de_' . $article['id']])) {
-                    $panier [$key]['quantity'] = $_POST['quantite_de_' . $article['id']];
-                } else {
-                    $panier [$key]['quantity']= $quantité_init;
-                }
-            }
-    
-            //je teste si la quantité est bonne ========> ok
-            foreach ($panier as $key => $article) {
-                //si j'ai une quantité
-                if (isset($_POST['quantite_de_' . $article['id']])) {
-                    $error = false;
-                    //j'initialise ma variable pour chaque article
-                    $quantite = $_POST['quantite_de_' . $article['id']];
-                    //si la quantité est vide
-                    if (empty($quantite)) {
-                        //j'initialise mon message d'erreur
-                        echo "Entrez une quantité pour" . $article['name'];
-                        $erreur = true;
-                    } else {
-                        $panier[$key]['quantity'] = $quantite;
-                    }
-                }
-            }
+    //cette méthode ajoute un nouvel objet au panier
+    public function add($id){
+        //si l'article est déjà dans le panier, ajouter 1 à la quantité
+        if (array_key_exists($id, $this->panier)) {
+            $this ->panier[$id] ++;
         }
+        //sinon ajouter l'article au panier et assigner la quantité à 1
+        else {
+            $this->panier[$id] = 1;
+        }        
     }
 
+    //cette méthode modifie la quantité d'un article
+    public function update($id, $qte){
+        $this->panier[$id] = $qte;
     }
 
-    public function add(){
-
+    //cette méthode supprime un article du panier
+    public function delete($id){
+        unset($this->panier[$id]);
     }
 
-    public function update(){
-
+    //cette méthode renvoie le tableau $panier
+    public function getPanier(){        
+        return $this->panier;
     }
-
-    public function delete(){
-
-    }
-
-    public function getPanier(){return $this->panier;}
     
 }
+
+//===============================================================================================
 
 ?>

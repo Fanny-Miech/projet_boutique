@@ -2,6 +2,9 @@
 include ("fonctions.php");
 include ("class.php");
 include ("entete.php"); //appelle la page d'entete
+
+session_start();
+$_SESSION['panier'] = new Panier();
 ?>
 
 

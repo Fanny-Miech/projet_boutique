@@ -203,7 +203,7 @@ function displayArticle(Article $article)
 function displayCat(Catalogue $catalogue)
 {
     //Je crée mon formlaire d'affichage du catalogue?>
-    <form method="post" action="panier_bdd.php">
+    <form method="post" action="panier_objet.php">
    
    <?php
    //ATTENTION : on ne peut pas boucler sur un tableau !!!
@@ -222,7 +222,7 @@ function displayCat(Catalogue $catalogue)
                 echo '<h3 class="indisponible"> Cet article est indisponible </h3>';
             } else {
                 //sinon mettre un bouton checkbox pour ajouter l'article au panier?>
-            <input class="checkbox" type="checkbox" name="<?php echo $id ?>" id="<?php echo $id ?>" />Sélectionner l'article</input>
+            <input class="checkbox" type="checkbox" name="add[]" id="<?php echo $id ?>" value="<?php echo $id ?>" />Sélectionner l'article</input>
             <?php
             }
         echo '<br /><br /><HR>'; ?>
@@ -258,3 +258,80 @@ function displayListeClients(ListeClients $listeClients){
 
 
 }
+
+//========================================================================
+
+//cette fonction affiche le panier
+function displayPanier(Panier $panier){
+    //pour chaque article de mon panier
+    foreach ($panier->getPanier() as $id=>$qte) { 
+        //connection BDD + aller chercher tous les articles de la bdd (requête sql SELECT * from Articles)
+        //$bdd=connectBDD();
+        try
+        {
+            $bdd = new PDO('mysql:host=localhost;dbname=bd_boutique;charset=utf8', 'fanny.miech', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+        //$article=getArticlePanier($bdd);
+        $reponse = $bdd->query('select * FROM Articles where id = '. $id);
+        $donnees = $reponse -> fetch();
+        $article = new Article($donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
+    
+
+        ?>
+        <div class="card-formulaire">
+            <!-- créer un champ caché pour garder le nom de l'article -->
+            <input type="hidden" name="<?php echo $article->getId(); ?>" id="<?php echo $article->getId() ?>">
+
+             <!-- j'affiche chaque article et lie le tableau article aux boutons de saisie-->
+             <label for="Quantité"><?php displayArticle($article) ?>
+
+            <!-- créer un champ 'quantité'-->
+            Quantité
+            <input type="number" name="update[<?= $article->getId()?>]" id="<?= 'quantite_de_' . $article->getId(); ?>"
+                   value="<?= $qte ?>"/>
+            <br><br>
+            <!-- créer un bouton 'supprimer'-->
+            Supprimer l'article
+            <input class="checkbox" type="checkbox" name="delete[<?php $article->getId()?>]" value="supprimer">
+
+            </label>
+
+            </br></br><HR>
+            <?php } ?>
+        </div>
+<?php
+}
+
+//====================================================================================
+
+//fonction appel la BDD
+function connectBDD(){
+    try
+    {
+        $bdd = new PDO('mysql:host=localhost;dbname=bd_boutique;charset=utf8', 'fanny.miech', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    }
+    catch(Exception $e)
+    {
+        die('Erreur : '.$e->getMessage());
+    }
+    return $bdd;
+}
+
+//============================================================================
+
+//cette fonction génère des nouveaux articles pour le panier
+function getArticlePanier($bdd){
+    $reponse = $bdd->query('select * FROM Articles where id = '. $id);
+    $donnees = $reponse -> fetch();
+    $article = new Article($donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
+
+    return $article;
+}
+
+
+
+?>

@@ -1,5 +1,5 @@
 <?php 
-session_start();
+
 include ("fonctions.php");//appelle la page fonction
 include ("class.php");
 
@@ -32,16 +32,30 @@ $quantité_init = '1';
 //3. On sauvegarde la panier en SESSION OK
 
 //================================================================================================
-
+session_start();
 //REMPLISSAGE DU PANIER
-
 //Si il y a un $_POST
-if (!empty($_POST)) {
-   $monPanier=new Panier($bdd);
-   var_dump($monPanier->getPanier());
+
+if (!empty($_POST["add"])) {
+   foreach($_POST["add"] as $id)
+   {
+       $_SESSION['panier']->add($id);
+   }
 }
 
+if (!empty($_POST["update"])) {
+    foreach($_POST["update"] as $id=>$qte)
+    {
+        $_SESSION['panier']->update($id, $qte);
+    }
+ }
 
+ if (!empty($_POST["delete"])){
+     foreach($_POST["update"] as $id){
+         $_SESSION['panier']->delete($id);
+     }
+ }
+/*
 //====================================================================================
 
 //si je n'ai pas de $_POST et j'ai un $_SESSION => inclure la session dans le panier =====>ok
@@ -65,7 +79,7 @@ $_SESSION['panier'] = $monPanier;
 
 //var_dump($_SESSION);
 //var_dump($monPanier);
-
+*/
 
 //REINITIALISATION DE $monPanier
 $quantite = "";
@@ -83,36 +97,10 @@ include ("entete.php"); //appelle la page d'entete
 <!-- crée un formulaire avec les différents articles du catalogue-->
 <div>
 
-    <form class="card-formulaire" method="post" action="panier_bdd.php">
+    <form class="card-formulaire" method="post" action="panier_objet.php">
         <?php
-        //pour chaque article de mon panier
-        foreach ($monPanier as $article) { ?>
-        <div class="card-formulaire">
-            <!-- créer un champ caché pour garder le nom de l'article -->
-            <input type="hidden" name="<?php echo $article['id']; ?>" id="<?php echo $article['id'] ?>">
-
-             <!-- j'affiche chaque article et lie le tableau article aux boutons de saisie-->
-             <label for="Quantité"><?php afficheArticle($article['name'], $article['image'], $article['price']) ?>
-
-            <!-- créer un champ 'quantité'-->
-         Quantité
-            <input type="number" name="<?= 'quantite_de_' . $article['id']; ?>" id="<?= 'quantite_de_' . $article['id']; ?>"
-                   value="<?= $article['quantity'] ?>"/>
-<br><br>
-            <!-- créer un bouton 'supprimer'-->
-            Supprimer l'article
-            <input class="checkbox" type="checkbox" name="<?= 'supprimer_' . $article['id']; ?>" value="supprimer">
-
-            </label>
-
-        </br></br><HR>
-            <?php } ?>
-
-        </div>
-
-        <!-- ===================================================================================== -->
-           
-        <?php
+        //afficher le panier
+        displayPanier($_SESSION['panier']);
         echo '<br/>.<br/>';
         //si mon panier est vide j'écris 'le panier est vide'
         if (empty($monPanier)) {
