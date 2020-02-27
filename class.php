@@ -236,6 +236,32 @@ class Panier {
     public function getPanier(){        
         return $this->panier;
     }
+
+    public function totPanier(){
+        $total=0;
+        //pour chaque article du panier
+        foreach ($this->panier as $id=>$quantite){
+            try
+        {
+            $bdd = new PDO('mysql:host=localhost;dbname=bd_boutique;charset=utf8', 'fanny.miech', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        }
+        catch(Exception $e)
+        {
+            die('Erreur : '.$e->getMessage());
+        }
+        //$article=getArticlePanier($bdd);
+        $reponse = $bdd->query('select * FROM Articles where id = '. $id);
+        $donnees = $reponse -> fetch();
+        $article = new Article($donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
+    
+
+            $article=$article->getArticle();
+            //ajouter le prix au total
+            $total+=intval($article['price'])*intval($quantite);
+        }
+        // echo '<h3>Total panier : '.$total. ' € </h3>';
+        return $total;
+    }
     
 }
 

@@ -103,11 +103,11 @@ include ("entete.php"); //appelle la page d'entete
         displayPanier($_SESSION['panier']);
         echo '<br/>.<br/>';
         //si mon panier est vide j'écris 'le panier est vide'
-        if (empty($monPanier)) {
+        if (empty($_SESSION['panier'])) {
             echo 'Le panier est vide </br>';
         } //sinon afficher le total
         else {
-            echo '<h3> Total Panier : '.totalPanier($monPanier).' €</h3>';
+            echo '<h3> Total Panier : '.$_SESSION['panier']->totPanier().' €</h3>';
         }
 
         ?>
