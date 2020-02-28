@@ -1,17 +1,9 @@
 <?php 
 
-include ("fonctions.php");//appelle la page fonction
-include ("class.php");
-
-//appelle la base de données 
-try
-{
-	$bdd = new PDO('mysql:host=localhost;dbname=bd_boutique;charset=utf8', 'fanny.miech', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-}
-catch(Exception $e)
-{
-    die('Erreur : '.$e->getMessage());
-}
+include 'fonctions.php';//appelle la page fonction
+include 'class.php'; //appelle les classes
+include 'connectBdd.php'; //appelle la base de données 
+include 'sql.php'; //appelle la page des requêtes sql à la bdd
 
 //=================================================================
 
@@ -20,28 +12,20 @@ $erreur = true;
 $monPanier = array();
 $quantité_init = '1';
 
-
-//=======================================================================================
-
-//0. On récupère notre catalogue        OK
-//1. On restaure notre panier depuis POST = on va stocker le produit correspondant à chacun des id
-//1.1. On boucle sur notre catalogue
-//1.2 Pour chaque produit du catalogue, on regarde si il est dans notre liste d'ids, si oui on l'ajoute au panier
-//1.3 Si le produit est dans notre panier on va chercher sa quantité et on l'ajoute au panier
-//2. On affiche le panier               OK
-//3. On sauvegarde la panier en SESSION OK
-
-//================================================================================================
 session_start();
-//REMPLISSAGE DU PANIER
-//Si il y a un $_POST
 
+//==============================================================
+//================== REMPLISSAGE DU PANIER ==================
+//================================================================
+
+//Si il y a un $_POST["add"] -> j'ajoute un $id à mon panier (avec un quantité initialisée à 1)
 if (!empty($_POST["add"])) {
    foreach($_POST["add"] as $id)
    {
        $_SESSION['panier']->add($id);
    }
 }
+
 
 if (!empty($_POST["update"])) {
     foreach($_POST["update"] as $id=>$qte)
@@ -76,7 +60,6 @@ $_SESSION['panier'] = $monPanier;
 
 //=============================================================================
 
-
 //var_dump($_SESSION);
 //var_dump($monPanier);
 */
@@ -101,7 +84,7 @@ include ("entete.php"); //appelle la page d'entete
         <?php
         var_dump($_POST);
         //afficher le panier
-        displayPanier($_SESSION['panier']);
+        displayPanier($_SESSION['panier'],$bdd);
         echo '<br/>.<br/>';
         //si mon panier est vide j'écris 'le panier est vide'
         if (empty($_SESSION['panier'])) {

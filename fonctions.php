@@ -12,7 +12,6 @@ function afficheArticle1() {
     echo ('<br />');
 }
 
-
 // Cette fonction affiche l'article 1
 function afficheArticle2() {
     $art2 = ["Machu Picchu","1200 €","images/matchu_pitchu.jpg" ];
@@ -25,7 +24,6 @@ function afficheArticle2() {
     echo ('<br />');
   
 }
-
 
 // Cette fonction affiche l'article 1
 function afficheArticle3() {
@@ -61,6 +59,10 @@ function afficheArticle($nom,$image,$prix) {
 
 }
 
+//=====================================================================================
+//============ FONCTION TEST ==============================================
+//======================================================================================
+
 
 // cette fonction teste si l'image a bien été envoyée et s'il n'y a pas d'erreur
 function testImage() {
@@ -84,6 +86,8 @@ if ($_FILES['photo']['error'] == 0)
 }
 }
 
+//=================================================================================
+
 //cette fonction teste si le prix est bien un entier > 0 
 //is_int($_POST['prix'])==false OR 
 function testPrix() {
@@ -96,6 +100,8 @@ function testPrix() {
 
 }
 
+//=====================================================================================
+
 //cette fonction teste si le texte de la destination est bien un texte
 function testDestination() {
     if (is_string($_POST['nom'])==false) {
@@ -105,6 +111,8 @@ function testDestination() {
         return false;
     }
 }
+
+//=====================================================================================
 
 
 //cette fonction calcule le total des articles du panier
@@ -119,6 +127,10 @@ function totalPanier($panier) {
     return $total;
 }
 
+//======================================================================================
+//============== FONCTION PANIER ================================================
+//=====================================================================================
+
 
 //cette fonction vide le panier
 function viderPanier(){
@@ -126,6 +138,8 @@ session_destroy();
 $monPanier=null;
 return $monPanier;
 }
+
+//============================================================================
 
 function totalWeight() {
     $total=0;
@@ -135,39 +149,9 @@ function totalWeight() {
     return $total;
 }
 
-//fonction qui appelle le dernier Users_id
-function last_users_id($bdd) {
-    $reponse = $bdd->query('SELECT id FROM users ORDER BY id DESC LIMIT 1')->fetch();
-    return $reponse[0];
-}
-
-//fonction qui appelle le dernier orders_id
-function last_orders_id($bdd)
-{
-    $reponse = $bdd->query('SELECT id FROM orders ORDER BY id DESC LIMIT 1')->fetch();
-    return $reponse[0];
-}
-
-//fonction qui retourne la date du jour
-function today_date($bdd){
-    $reponse = $bdd->query('SELECT CURRENT_DATE')->fetch();
-    $date = $reponse[0];
-    return $date;
-}
-
-//cette fonction supprime les clients qui n'ont pas de commande
-function suppr_client($bdd) {
-    $reponse = $bdd->query('DELETE FROM users
-    WHERE users.id 
-    NOT IN (
-        SELECT orders.Users_id
-        FROM orders
-        )
-    ');
-}
 
 //====================================================================
-//============================== FONCTIONS =================================
+//================= FONCTIONS OBJET =================================
 //====================================================================
 
 // Cette fonction affiche un article
@@ -193,8 +177,6 @@ function displayArticle(Article $article)
     echo '</div></div>';
 }
 
-//$articleTest = new Article (15, 'blabla', 'Voyage voyage', 500, 2, 'img/pattaya.jpg', 5, 1, 3);
-//var_dump($articleTest);
 
 //=======================================================================================
 
@@ -255,32 +237,19 @@ function displayListeClients(ListeClients $listeClients){
         foreach ($listeClients->getListeClients() as $client){
         displayClient($client);
     }
-
-
 }
 
 //========================================================================
 
 //cette fonction affiche le panier
-function displayPanier(Panier $panier){
-    //pour chaque article de mon panier
+function displayPanier(Panier $panier, $bdd){
+            //inclure la page des requêtes sql.php
+    //pour chaque article de mon tableau panier
     foreach ($panier->getPanier() as $id=>$qte) { 
-        //connection BDD + aller chercher tous les articles de la bdd (requête sql SELECT * from Articles)
-        //$bdd=connectBDD();
-        try
-        {
-            $bdd = new PDO('mysql:host=localhost;dbname=bd_boutique;charset=utf8', 'fanny.miech', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        }
-        catch(Exception $e)
-        {
-            die('Erreur : '.$e->getMessage());
-        }
-        //$article=getArticlePanier($bdd);
-        $reponse = $bdd->query('select * FROM Articles where id = '. $id);
-        $donnees = $reponse -> fetch();
-        $article = new Article($donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
-    
 
+        //créer une instance d'Article via l'id du panier (sql: WHERE articles.id = $id)
+        $article=articlePanier($bdd, $id);
+        
         ?>
         <div class="card-formulaire">
             <!-- créer un champ caché pour garder le nom de l'article -->
@@ -304,32 +273,6 @@ function displayPanier(Panier $panier){
             <?php } ?>
         </div>
 <?php
-}
-
-//====================================================================================
-
-//fonction appel la BDD
-function connectBDD(){
-    try
-    {
-        $bdd = new PDO('mysql:host=localhost;dbname=bd_boutique;charset=utf8', 'fanny.miech', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-    }
-    catch(Exception $e)
-    {
-        die('Erreur : '.$e->getMessage());
-    }
-    return $bdd;
-}
-
-//============================================================================
-
-//cette fonction génère des nouveaux articles pour le panier
-function getArticlePanier($bdd){
-    $reponse = $bdd->query('select * FROM Articles where id = '. $id);
-    $donnees = $reponse -> fetch();
-    $article = new Article($donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
-
-    return $article;
 }
 
 

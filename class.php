@@ -1,15 +1,4 @@
 <?php
-
-//appelle la base de données bd_boutique
-try
-{
-	$bdd = new PDO('mysql:host=localhost;dbname=bd_boutique;charset=utf8', 'fanny.miech', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-}
-catch(Exception $e)
-{
-    die('Erreur : '.$e->getMessage());
-}
-
 //===============================================================================
 //======================== CLASSES ===================================
 //=====================================================================
@@ -73,29 +62,15 @@ class Article {
 
 //==================================================================================
 
-class Catalogue {
+class Catalogue {  
 
     //1 attribut catalogue (tableau d'articles)
     private $cat=array();
 
     //__construct pour instancier un catalogue depuis une BDD
     public function __construct($bdd){
-        //connection BDD + aller chercher tous les articles de la bdd (requête sql SELECT * from Articles)
-        $reponse = $bdd->query('select articles.id, taille, name, pointure, description, price, weight, image, stock, for_sale, Categories_id from articles left join chaussures on articles.id = chaussures.articles_id left join vetements on articles.id = vetements.articles_id  order by Categories_id');
-        while ($donnees = $reponse -> fetch()){
-            if ($donnees['taille']!=null){
-                $article = new Vetement($donnees['taille'],$donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
-            }
-            else if ($donnees['pointure']!=null){
-                $article = new Chaussure($donnees['pointure'], $donnees['id'], $donnees['name'], $donnees['description'],$donnees['price'],$donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']); 
-            }
-            else {
-                //instancier des nouveaux articles en objet Article via la base de données
-                $article = new Article($donnees['id'], $donnees['name'], $donnees['description'], $donnees['price'], $donnees['weight'], $donnees['image'], $donnees['stock'], $donnees['for_sale'], $donnees['Categories_id']);
-            }
-            //remplir le catalogue avec chaque article
-            $this->cat[]=$article;
-        }
+        //construire un catalogue d'objets Article (requête sql SELECT * from Articles)
+       $this->cat=constructCat($bdd);
     }
 
     // méthode get pour retourner le catalogue (--> TABLEAU d'objets Article)
@@ -104,12 +79,9 @@ class Catalogue {
     }
 }
 
-//Instance d'un nouvel objet Catalogue : $cat_boutique
-//$cat_boutique = new Catalogue($bdd);
-//var_dump($cat_boutique->getCat());
-
 
 //=========================================================================================
+
 class  Client {
 
     //les attributs d'un objet Client :
@@ -157,14 +129,10 @@ class ListeClients {
 
       //__construct pour instancier un catalogue depuis une BDD
       public function __construct($bdd){
-          //connection BDD + aller chercher tous les articles de la bdd (requête sql SELECT * from Articles)
-          $reponse = $bdd->query('select * from users');
-          while ($donnees = $reponse -> fetch()){
-              //instancier des nouveaux articles en objet Article via la base de données
-              $client = new Client($donnees['id'], $donnees['name'], $donnees['email'],$donnees['adress'],$donnees['postal_code'], $donnees['city']);
-              //remplir le catalogue avec chaque article
-              $this->listeClients[]=$client;
-          }
+        //connection à la BDD
+        
+        //construire un tableau d'objets Client via la BDD (requête sql)
+        $this->listeClients = constructListClient($bdd);
       }
   
       // méthode get pour retourner le catalogue
@@ -212,14 +180,14 @@ class Panier {
 
     //cette méthode ajoute un nouvel objet au panier
     public function add($id){
-        //si l'article est déjà dans le panier, ajouter 1 à la quantité
+        /*si l'article est déjà dans le panier, ajouter 1 à la quantité
         if (array_key_exists($id, $this->panier)) {
             $this ->panier[$id] ++;
-        }
+        }*/
         //sinon ajouter l'article au panier et assigner la quantité à 1
-        else {
+        // else {
             $this->panier[$id] = 1;
-        }        
+        //}        
     }
 
     //cette méthode modifie la quantité d'un article

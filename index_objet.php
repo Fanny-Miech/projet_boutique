@@ -1,10 +1,15 @@
 <?php
 include ("fonctions.php");
 include ("class.php");
+include 'connectBdd.php'; //appelle la base de données 
 include ("entete.php"); //appelle la page d'entete
+include 'sql.php'; //appelle la page des requêtes sql à la bdd
 
 session_start();
-$_SESSION['panier'] = new Panier();
+if (empty($_SESSION['panier'])){
+    $_SESSION['panier'] = new Panier();
+}
+
 ?>
 
 
