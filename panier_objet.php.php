@@ -26,7 +26,6 @@ if (!empty($_POST["add"])) {
    }
 }
 
-
 if (!empty($_POST["update"])) {
     foreach($_POST["update"] as $id=>$qte)
     {
@@ -39,30 +38,8 @@ if (!empty($_POST["update"])) {
          $_SESSION['panier']->delete($id);
      }
  }
-/*
+
 //====================================================================================
-
-//si je n'ai pas de $_POST et j'ai un $_SESSION => inclure la session dans le panier =====>ok
-elseif (!empty($_SESSION['panier'])) {
-    $monPanier = $_SESSION['panier'];
-}
-
-
-//================================================================================
-
-//Si pas de $_SESSION et pas de $_POST ==> écrire le panier est vide
-else {
-    echo '<h3>Le panier est vide.</h3>';
-}
-
-//réinitialisation de $_SESSION ====> ok
-$_SESSION['panier'] = $monPanier;
-
-//=============================================================================
-
-//var_dump($_SESSION);
-//var_dump($monPanier);
-*/
 
 //REINITIALISATION DE $monPanier
 $quantite = "";
@@ -82,7 +59,6 @@ include ("entete.php"); //appelle la page d'entete
 
     <form class="card-formulaire" method="post" action="panier_objet.php">
         <?php
-        var_dump($_POST);
         //afficher le panier
         displayPanier($_SESSION['panier'],$bdd);
         echo '<br/>.<br/>';
@@ -91,7 +67,13 @@ include ("entete.php"); //appelle la page d'entete
             echo 'Le panier est vide </br>';
         } //sinon afficher le total
         else {
-            echo '<h3> Total Panier : '.$_SESSION['panier']->totPanier().' €</h3>';
+            if ($_SESSION['panier']->totPanier($bdd)==0) {
+                echo '<h2>Le panier est vide.</h2>';
+            }
+            else{
+                echo '<h3> Total Panier : '.$_SESSION['panier']->totPanier($bdd).' €</h3>';
+            }
+            
         }
 
         ?>
@@ -109,13 +91,13 @@ include ("entete.php"); //appelle la page d'entete
     <form class="card-formulaire" method="post" action="commande_bdd.php">
     <?php
         //pour chaque article de mon panier
-        foreach ($monPanier as $article) { ?>
+        foreach ($_SESSION['panier']->getPanier() as $id=>$qte) { ?>
             
             <!-- créer un champ caché pour garder l'id de l'article -->
-            <input type="hidden" name="<?php echo $article['id']; ?>" id="<?php echo $article['id'] ?>">
+            <input type="hidden" name="<?=$id; ?>" id="<?= $id;?>">
             
             <!-- créer un champ caché pour garder la quantité de l'article -->
-            <input type="hidden" name="<?php echo $article['quantity']; ?>" id="<?php echo $article['quantity'] ?>">
+            <input type="hidden" name="<?= $qte; ?>" id="<?= $qte; ?>">
             <?php
         }?>
     </br><br>
