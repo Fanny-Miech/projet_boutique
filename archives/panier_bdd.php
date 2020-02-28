@@ -69,7 +69,7 @@ if (!empty($_POST)) {
 }
 //====================================================================================
 
-//si je n'ai pas de $_POST et j'ai un $_SESSION => inclure la session dans le panier =====>ok
+//si je n'ai pas de $_POST et j'ai une $_SESSION => inclure la session dans le panier =====>ok
 elseif (!empty($_SESSION['panier'])) {
     $monPanier = $_SESSION['panier'];
 }

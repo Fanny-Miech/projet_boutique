@@ -213,9 +213,9 @@ class Panier {
         //$article=getArticlePanier($bdd);
             $article=articlePanier($bdd, $id);
 
-            $article=$article->getArticle();
-            //ajouter le prix au total
-            $total+=intval($article['price'])*intval($quantite);
+            $price=$article->getPrice();
+            //ajouter le prix*qte au total
+            $total+=intval($price)*intval($quantite);
         }
         // echo '<h3>Total panier : '.$total. ' € </h3>';
         return $total;
