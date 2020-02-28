@@ -86,5 +86,5 @@ function constructListClient($bdd) {
     }
 
     return $listClients;
-    var_dump($listClients);
+    //var_dump($listClients);
 }
